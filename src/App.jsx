@@ -1,40 +1,25 @@
 // src/App.js
-import React, { useEffect, useState } from "react";
-import {
-  redirectToAuthCodeFlow,
-  getAccessToken,
-  fetchProfile,
-} from "./services/auth";
-import Profile from "./components/Profile";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getProfile } from "./features/profile/profileSlice";
+import { getTopTracks } from "./features/topTracks/topTracksSlice";
+import { useSpotifyAuth } from "./hooks/useSpotifyAuth";
+import AppRouter from "./AppRouter";
 
 const App = () => {
-  const [profile, setProfile] = useState(null);
+  const dispatch = useDispatch();
+  const token = useSpotifyAuth();
 
   useEffect(() => {
-    const fetchData = async () => {
-      const params = new URLSearchParams(window.location.search);
-      const code = params.get("code");
-
-      if (!code) {
-        redirectToAuthCodeFlow();
-      } else {
-        try {
-          const accessToken = await getAccessToken(code);
-          const profileData = await fetchProfile(accessToken);
-          setProfile(profileData);
-        } catch (error) {
-          console.error("Error fetching access token or profile:", error);
-        }
-      }
-    };
-
-    fetchData();
-  }, []);
+    if (token) {
+      dispatch(getProfile(token));
+      dispatch(getTopTracks(token));
+    }
+  }, [token, dispatch]);
 
   return (
     <div>
-      <h1>Spotify Auth with PKCE</h1>
-      {!profile ? <p>Loading...</p> : <Profile profile={profile} />}
+      <AppRouter />
     </div>
   );
 };

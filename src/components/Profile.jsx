@@ -1,7 +1,24 @@
 // src/components/Profile.js
 import React from "react";
+import { useSelector } from "react-redux";
 
-const Profile = ({ profile }) => {
+const Profile = () => {
+  const profile = useSelector((state) => state.profile.data);
+  const status = useSelector((state) => state.profile.status);
+  const error = useSelector((state) => state.profile.error);
+
+  if (status === "loading") {
+    return <p>Loading...</p>;
+  }
+
+  if (status === "failed") {
+    return <p>Error: {error}</p>;
+  }
+
+  if (!profile) {
+    return null;
+  }
+
   return (
     <section id="profile">
       <h2>
