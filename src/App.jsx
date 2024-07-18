@@ -1,24 +1,10 @@
 // src/App.js
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { getProfile } from "./features/profile/profileSlice";
-import { getTopTracks } from "./features/topTracks/topTracksSlice";
-import { useSpotifyAuth } from "./hooks/useSpotifyAuth";
+import React from "react";
 import AppRouter from "./AppRouter";
 
 const App = () => {
-  const dispatch = useDispatch();
-  const token = useSpotifyAuth();
-
-  useEffect(() => {
-    if (token) {
-      dispatch(getProfile(token));
-      dispatch(getTopTracks(token));
-    }
-  }, [token, dispatch]);
-
   return (
-    <div>
+    <div className="flex-1 bg-slate-900 h-screen p-4">
       <AppRouter />
     </div>
   );

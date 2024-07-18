@@ -11,14 +11,30 @@ import ProfilePage from "./pages/ProfilePage";
 import TopTracksPage from "./pages/TopTracksPage";
 import NotFound from "./pages/NotFound";
 import Root from "./pages/Root";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Callback from "./pages/Callback";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Root />}>
-      <Route index element={<Home />} />
-      <Route path="home" element={<Home />} />
-      <Route path="profile" element={<ProfilePage />} />
-      <Route path="top-tracks" element={<TopTracksPage />} />
+      <Route path="/callback" element={<Callback />} />
+      <Route path="/home" element={<Home />} />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/top-tracks"
+        element={
+          <ProtectedRoute>
+            <TopTracksPage />
+          </ProtectedRoute>
+        }
+      />
       <Route path="*" element={<NotFound />} />
     </Route>
   )

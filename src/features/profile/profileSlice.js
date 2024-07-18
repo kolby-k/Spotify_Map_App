@@ -4,11 +4,12 @@ import { fetchProfile } from "../../api/spotify";
 
 export const getProfile = createAsyncThunk(
   "profile/getProfile",
-  async (token, { rejectWithValue }) => {
+  async (_, thunkAPI) => {
     try {
+      const token = thunkAPI.getState().auth?.token;
       return await fetchProfile(token);
     } catch (error) {
-      return rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
